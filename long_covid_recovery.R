@@ -15,6 +15,7 @@ library(epiDisplay)
 library(ggplot2)
 library(gtsummary)
 library(gt)
+library(aod)
 
 # read in 2022 NHIS survey data
 df_orig <- fread('adult22.csv')
@@ -470,6 +471,20 @@ fit <- svyglm(recovered_lc ~
                      design = svy_design, 
                      data = df_small,
                      family = quasibinomial(link = 'logit'))
+
+
+# wald tests for the categorical variables with more than 2 levels
+# age
+wtest_age <- wald.test(b = coef(fit), Sigma = vcov(fit), Terms = 2:3)    
+wPvalue_age <- wtest_age$result$chi2[3]   # p = 0.00956
+
+# race
+wtest_race <- wald.test(b = coef(fit), Sigma = vcov(fit), Terms = 5:8)    
+wPvalue_race <- wtest_race$result$chi2[3]  # p = 0.0385
+
+# symptom severity
+wtest_ss <- wald.test(b = coef(fit), Sigma = vcov(fit), Terms = 11:12)    
+wPvalue_ss <- wtest_ss$result$chi2[3]  # p = 0.00599
 
 # get odds ratios and confidence intervals
 logistic.display(fit)
