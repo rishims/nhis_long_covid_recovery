@@ -466,8 +466,7 @@ fit <- svyglm(recovered_lc ~
                        relevel(race_simple, ref = "NH White") + 
                        relevel(urbrur, ref = "Nonmetropolitan") +
                        relevel(educ_binary, ref = "Less HS") +
-                       relevel(cvdsev_a, ref = "Mild symptoms") +
-                       relevel(citizen_binary, ref = "Citizen"),
+                       relevel(cvdsev_a, ref = "Mild symptoms"),
                      design = svy_design, 
                      data = df_small,
                      family = quasibinomial(link = 'logit'))
